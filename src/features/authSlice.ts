@@ -66,15 +66,16 @@ const authSlice = createSlice({
             state.loading = true;
             state.error = null;
         })
-        .addCase(registerCompany.fulfilled, (state, action: PayloadAction<Company>) => {
+        .addCase(registerCompany.fulfilled, (state, action: PayloadAction<{ message: string, companyData: Company }>) => {
+            state.company = action.payload.companyData;
             state.loading = false;
-            state.company = action.payload;
             state.error = null;
         })
         .addCase(registerCompany.rejected, (state, action: PayloadAction<any>) => {
             state.loading = false;
-            state.error = action.payload;
+            state.error = action.payload;            
         })
+
         .addCase(verifyEmailOtp.pending, (state) => {
             state.loading = true;
             state.error = null;

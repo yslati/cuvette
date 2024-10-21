@@ -5,7 +5,18 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "mainColor": "#0B66EF",
+        "grayColor": "#292929",
+        "borderColor": "#CCCCCC",
+        "inputColor": "#F4F4F4",
+        "inputTextColor": "#535353"
+      },
+      fontFamily: {
+        DMSans: ['DMSans', 'sans-serif'],
+      }
+    },
   },
   plugins: [],
 }
