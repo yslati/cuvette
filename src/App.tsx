@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
-import VerifyOtp from "./pages/VerifyOtp";
 import PrivateRoute from "./components/PrivateRoute";
 import JobDetails from "./pages/JobDetails";
 import AddJob from "./pages/AddJob";
@@ -16,7 +15,6 @@ const App = () => {
         <Route path="/" element={ <Home /> } />
         <Route path="/register" element={ <Register /> } />
         <Route path="/login" element={ <Login /> } />
-        <Route path="/verify-otp" element={ <VerifyOtp /> } />
         <Route path="/dashboard" element={
           <PrivateRoute>
             <Dashboard />

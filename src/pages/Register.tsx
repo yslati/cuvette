@@ -1,15 +1,27 @@
+import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../app/hooks";
 import LoadingPage from "../components/Loading";
 import SignUpForm from "../components/SignUpForm";
 import VerifyOtp from "./VerifyOtp";
+import { useEffect } from "react";
 
 const Register = () => {
 
-    const { loading, company } = useAppSelector((state) => state.auth)
+    const navigate = useNavigate();
+    const { loading, company } = useAppSelector((state) => state.auth);
+
+    
+    useEffect(() => {
+        console.log(company);
+        if (company?.isVerified) {
+            
+            navigate('/dashboard');
+        }
+    }, [company?.isVerified])
 
     return (
         <div className="w-screen h-screen flex items-center justify-between px-36 font-DMSans gap-x-5">
-            { loading && <LoadingPage /> }
+            { loading && !company && <LoadingPage /> }
             <div className="w-[39rem]">
                 <p className="text-grayColor/70 ">
                     Lorem Ipsum is simply dummy text of the printing and  typesetting industry. 
