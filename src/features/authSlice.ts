@@ -38,6 +38,18 @@ export const verifyEmailOtp = createAsyncThunk(
     }
 );
 
+export const verifyPhoneOtp = createAsyncThunk(
+    'auth/verify-phone-otp',
+    async ({ companyEmail, phoneOtp }: { companyEmail: string; phoneOtp: string }, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.post('/auth/verify-phone-otp', { companyEmail, phoneOtp });
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 export const refreshToken = createAsyncThunk(
     'auth/refresh-token',
     async (data: { companyEmail: string; refreshToken: string }, { rejectWithValue }) => {
@@ -58,6 +70,7 @@ const authSlice = createSlice({
             state.company = null;
             state.loading = false;
             state.error = null;
+            localStorage.removeItem('accessToken');
         }
     },
     extraReducers: (builder) => {
@@ -73,20 +86,38 @@ const authSlice = createSlice({
         })
         .addCase(registerCompany.rejected, (state, action: PayloadAction<any>) => {
             state.loading = false;
-            state.error = action.payload;            
+            state.error = action.payload;
+            console.log(state.error);
         })
 
         .addCase(verifyEmailOtp.pending, (state) => {
             state.loading = true;
             state.error = null;
         })
-        .addCase(verifyEmailOtp.fulfilled, (state, action: PayloadAction<any>) => {
+        .addCase(verifyEmailOtp.fulfilled, (state, action: PayloadAction<{ accessToken: string, companyData: Company, message: string }>) => {
             state.loading = false;
-            state.company = { ...state.company, isEmailVerified: true } as Company;
-            // refresh token and access token 
+            state.company = action.payload.companyData;
+            if (action.payload.accessToken)
+                localStorage.setItem("accessToken", action.payload.accessToken);
             state.error = null;
         })
         .addCase(verifyEmailOtp.rejected, (state, action: PayloadAction<any>) => {
+            state.loading = false;
+            state.error = action.payload;
+        })
+
+        .addCase(verifyPhoneOtp.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(verifyPhoneOtp.fulfilled, (state, action: PayloadAction<{ accessToken: string, companyData: Company, message: string }>) => {
+            state.loading = false;
+            state.company = action.payload.companyData;
+            if (action.payload.accessToken)
+                localStorage.setItem("accessToken", action.payload.accessToken);
+            state.error = null;
+        })
+        .addCase(verifyPhoneOtp.rejected, (state, action: PayloadAction<any>) => {
             state.loading = false;
             state.error = action.payload;
         });
