@@ -1,7 +1,8 @@
 import { BriefcaseIcon, EnvelopeIcon, PhoneIcon, UserGroupIcon, UserIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { useAppDispatch } from "../app/hooks";
-import { registerCompany } from "../features/authSlice";
+import { useAppDispatch } from "../../../app/hooks";
+import { registerCompany } from "../../../features/authSlice";
+import toast from "react-hot-toast";
 
 
 const SignUpForm = () => {
@@ -14,8 +15,14 @@ const SignUpForm = () => {
     const dispatch = useAppDispatch();
 
     const submitForm = () => {
-        if (!name || !phoneNumber || !companyName || !companyEmail || !employeeSize) return;
-        if (employeeSize < 1 || employeeSize > 1000000) return;
+        if (!name || !phoneNumber || !companyName || !companyEmail || !employeeSize) {
+            toast.error('You must fill add data')
+            return
+        }
+        if (employeeSize < 1 || employeeSize > 1000000) {
+            toast.error('Error: Employee Size')
+            return
+        }
 
         const data = {name, phoneNumber, companyName, companyEmail, employeeSize}
         dispatch(registerCompany(data))

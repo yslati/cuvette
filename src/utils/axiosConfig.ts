@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { checkTokenExpiration } from '../features/authSlice';
 
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:5000',
@@ -6,10 +7,12 @@ const axiosInstance = axios.create({
 })
 
 // axiosInstance.interceptors.request.use(
-//   (config) => {
-//       const token = localStorage.getItem('accessToken');
-//       if (token) {
-//           config.headers['Authorization'] = `Bearer ${token}`;
+//   async (config) => {
+//       const { default: store } = await import('../app/store');
+//       await store.dispatch(checkTokenExpiration());
+//       const accessToken = localStorage.getItem('accessToken');
+//       if (accessToken) {
+//           config.headers['Authorization'] = `Bearer ${accessToken}`;
 //       }
 //       return config;
 //   },
