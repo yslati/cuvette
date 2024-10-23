@@ -5,7 +5,11 @@ const PrivateRoute = ({ children }: { children: JSX.Element }) => {
 
     const { company } = useAppSelector((state) => state.auth)
 
-    if (!company) return <Navigate to="/login" />
+    console.log(company);
+    
+
+    if (!company || !company.isEmailVerified || !company.isPhoneVerified)
+        return (<Navigate to="/" />);
 
     return ( children );
 }
