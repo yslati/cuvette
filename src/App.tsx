@@ -11,6 +11,7 @@ import { useAppDispatch } from "./app/hooks";
 import { useEffect } from "react";
 import { initializeAuth } from "./features/authSlice";
 import { Toaster } from 'react-hot-toast'
+import Navbar from "./pages/Navbar";
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -23,6 +24,7 @@ const App = () => {
     <div>
       <Toaster reverseOrder={false} position="top-right" />
       <BrowserRouter>
+        <Navbar />
         <Routes>
           <Route path="/" element={ <Home /> } />
           <Route path="/register" element={ <Register /> } />
