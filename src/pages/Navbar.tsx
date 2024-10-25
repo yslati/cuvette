@@ -18,7 +18,7 @@ const Navbar = () => {
     return (
         <nav className="absolute top-0 right-0 w-screen py-7 flex justify-between px-14 font-DMSans items-center">
             <div className="">
-                <Link to={"/"}>
+                <Link to={company && company.isEmailVerified && company.isPhoneVerified ? "/dashboard" : "/"}>
                     <img src="./logo.png" alt="Logo" 
                         className="w-[10.31rem] h-full object-cover"
                         />
