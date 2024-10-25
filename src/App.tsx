@@ -3,22 +3,28 @@ import Home from "./pages/Home";
 import Register from "./pages/auth/Register";
 import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
-import JobDetails from "./pages/Job/JobDetails";
+// import JobDetails from "./pages/Job/JobDetails";
 import AddJob from "./pages/Job/AddJob";
 import Login from "./pages/auth/Login";
 import NotFound from "./pages/NotFound";
-import { useAppDispatch } from "./app/hooks";
+import { useAppDispatch, useAppSelector } from "./app/hooks";
 import { useEffect } from "react";
 import { initializeAuth } from "./features/authSlice";
 import { Toaster } from 'react-hot-toast'
 import Navbar from "./pages/Navbar";
+import LoadingPage from "./components/Loading";
 
 const App = () => {
   const dispatch = useAppDispatch();
+  const { loading, initialized } = useAppSelector((state) => state.auth)
 
+  
   useEffect(() => {
     dispatch(initializeAuth())
   }, [dispatch])
+
+  if (loading || !initialized)
+    return <LoadingPage />
 
   return (
     <div>
@@ -39,7 +45,7 @@ const App = () => {
               <AddJob />
             </PrivateRoute>
           } />
-          <Route path="/jobs/:id" element={ <JobDetails /> } />
+          {/* <Route path="/jobs/:id" element={ <JobDetails /> } /> */}
           <Route path="*" element={ <NotFound /> } />
         </Routes>
       </BrowserRouter>

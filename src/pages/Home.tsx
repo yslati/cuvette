@@ -1,6 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { useAppSelector } from "../app/hooks";
 
 const Home = () => {
+
+    const { company } = useAppSelector((state) => state.auth);
+
+    if (company && company.isEmailVerified && company.isPhoneVerified)
+        return (<Navigate to="/dashboard" />)
 
     return (
         <div className="w-screen h-screen flex flex-col justify-center items-center gap-y-5">
