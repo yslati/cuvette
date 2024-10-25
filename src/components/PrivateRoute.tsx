@@ -1,12 +1,13 @@
 import { Navigate } from "react-router-dom";
 import { useAppSelector } from "../app/hooks";
+import LoadingPage from "./Loading";
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
 
-    const { company } = useAppSelector((state) => state.auth)
+    const { company, loading } = useAppSelector((state) => state.auth)
 
-    console.log(company);
-    
+    if (loading)
+        return <LoadingPage />
 
     if (!company || !company.isEmailVerified || !company.isPhoneVerified)
         return (<Navigate to="/" />);

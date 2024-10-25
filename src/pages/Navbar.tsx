@@ -11,6 +11,7 @@ const Navbar = () => {
     const { company } = useAppSelector((state) => state.auth)
 
     const handlelogout = () => {
+        setNavDropped(false);
         dispatch(logout());
     }
 
@@ -44,7 +45,7 @@ const Navbar = () => {
                         </div>
                         <ul className=" text-sm text-gray-700">
                             <li><Link to="/dashboard" className="block px-4 py-3 hover:bg-gray-200">Dashboard</Link></li>
-                            <li><Link to="#" className="block px-4 py-3 hover:bg-gray-200">Settings</Link></li>
+                            <li><Link to="#" className="block px-4 py-3 hover:bg-gray-200">Edit Profile</Link></li>
                         </ul>
                         <div className="">
                             <Link onClick={() => handlelogout()} to="/" className="block px-4 py-4 text-sm text-gray-700 hover:bg-gray-200 rounded-b-lg">

@@ -2,19 +2,20 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axiosInstance from '../utils/axiosConfig'
 import { Company, RegisterForm } from '../types/company'
 import { jwtDecode, JwtPayload } from 'jwt-decode'
-import { RootState } from '../app/store'
 import toast from 'react-hot-toast'
 
 interface CompanyState {
     company: Company | null
     loading: boolean
     error: string | null
+    initialized: boolean
 }
 
 const initialState: CompanyState = {
     company: null,
     loading: false,
-    error: null
+    error: null,
+    initialized: false
 }
 
 export const registerCompany = createAsyncThunk(
@@ -67,30 +68,19 @@ export const verifyPhoneOtp = createAsyncThunk(
 
 export const checkTokenExpiration = createAsyncThunk(
     'auth/check-token-expiration',
-    async (_, { getState, dispatch }) => {
-        const state = getState() as RootState;
-        const accessToken = localStorage.getItem('accessToken');
+    async (_, { dispatch }) => {
         const refreshToken = localStorage.getItem('refreshToken');
 
-        if (accessToken && refreshToken) {
-            const decodedToken = jwtDecode<JwtPayload>(accessToken);
-            const currentTime = Date.now() / 1000;
-
-            if (decodedToken.exp && decodedToken.exp < currentTime) {
-                try {
-                    const response = await axiosInstance.post('/auth/refresh-token', {
-                        companyEmail: state.auth.company?.companyEmail,
-                        refreshToken,
-                    });
-                    return response.data;
-                } catch (error) {
-                    dispatch(logout());
-                    throw new Error('Session expired, please log in again.');
-                }
+        if (refreshToken) {
+            try {
+                const response = await axiosInstance.post('/auth/refresh-token', {refreshToken});
+                const { accessToken, company } = response.data;                
+                localStorage.setItem('accessToken', accessToken);
+                return company
+            } catch (error) {
+                dispatch(logout());
+                throw new Error('Session expired, please log in again.');
             }
-            return accessToken;
-        } else {
-            dispatch(logout());
         }
     }
 );
@@ -100,9 +90,14 @@ export const initializeAuth = createAsyncThunk(
     async (_, { dispatch }) => {
         try {
             await dispatch(checkTokenExpiration());
-            // load user data
+            // const state = getState() as RootState;
+            // if (state.auth.company) {
+            // } else {
+            //     dispatch(logout());
+            // }
         } catch (error) {
             console.error(error);
+            dispatch(logout());
         }
     }
 );
@@ -111,6 +106,9 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
+        setCompany(state, action: PayloadAction<Company>) {
+            state.company = action.payload;
+        },
         logout: (state) => {
             state.company = null;
             state.loading = false;
@@ -191,19 +189,30 @@ const authSlice = createSlice({
             toast.error(state.error);
         })
 
-        .addCase(checkTokenExpiration.fulfilled, (state, action: PayloadAction<any>) => {
+        .addCase(checkTokenExpiration.pending, (state) => {
+            state.loading = true; 
+        })
+        .addCase(checkTokenExpiration.fulfilled, (state, action: PayloadAction<Company>) => {
+            if (action.payload) {
+                state.company = action.payload
+            }
             state.loading = false;
-            localStorage.setItem('accessToken', action.payload.accessToken)
+            
         })
         .addCase(checkTokenExpiration.rejected, (state, action) => {
             state.loading = false;
             state.error = action.error.message || 'Token validation failed.';
         })
+        .addCase(initializeAuth.pending, (state) => {
+            state.loading = true;
+        })
         .addCase(initializeAuth.fulfilled, (state) => {
             state.loading = false;
+            state.initialized = true;
         })
         .addCase(initializeAuth.rejected, (state, action) => {
             state.loading = false;
+            state.initialized = true;
             state.error = action.error.message || 'Initialization failed.';
         })
     }
