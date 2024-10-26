@@ -37,10 +37,10 @@ const Navbar = () => {
                         <span className="text-[#6A6A6A] text-lg truncate select-none">
                             { company?.name }
                         </span>
-                        <ChevronDownIcon className="text-[A8A8A8] h-4 w-4" />
+                        <ChevronDownIcon className="text-[A8A8A8] h-4 w-4 ml-auto" />
                     </div>
                     <div hidden={!navDropped} className="absolute overflow-x-auto w-52 -mt-1.5 z-10 bg-white rounded-b-lg shadow  divide-y divide-[#83909F]/60 border-x border-b border-[#83909F] transition-all duration-500">
-                        <div className="px-4 py-3 text-sm text-gray-900">
+                        <div className="px-4 py-3 text-sm text-gray-900 truncate overflow-x-hidden">
                             <span className="font-medium truncate">{ company?.companyEmail }</span>
                         </div>
                         <ul className=" text-sm text-gray-700">

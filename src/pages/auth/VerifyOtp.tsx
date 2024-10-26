@@ -27,11 +27,8 @@ const VerifyOtp = () => {
         try {
             const resultAction = await dispatch(verifyEmailOtp({ companyEmail: company.companyEmail, emailOtp }));
             if (verifyEmailOtp.fulfilled.match(resultAction) && company.isPhoneVerified) {
-                console.log(resultAction);
-                console.log(company.isPhoneVerified);
-                
                 toast.success(resultAction.payload.message);
-                navigate('/dashboard');
+                navigate('/dashboard', { replace: true });
             }
         } finally {
             setEmailLoading(false);
@@ -46,7 +43,7 @@ const VerifyOtp = () => {
             const resultAction = await dispatch(verifyPhoneOtp({ companyEmail: company.companyEmail, phoneOtp }));
             if (verifyPhoneOtp.fulfilled.match(resultAction) && company.isEmailVerified) {
                 toast.success(resultAction.payload.message);
-                navigate('/dashboard');
+                navigate('/dashboard', { replace: true });
             }
         } finally {
             setPhoneLoading(false);
