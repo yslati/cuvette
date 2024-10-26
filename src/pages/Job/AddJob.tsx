@@ -8,13 +8,12 @@ const AddJob = () => {
     const [jobTitle, setJobTitle] = useState('')
     const [jobDescription, setJobDescription] = useState('')
     const [expLevel, setExpLevel] = useState('')
+    const [candidate, setCandidate] = useState('')
     const [expDate, setExpDate] = useState({ 
         startDate: null, 
         endDate: null
     });
 
-    const MIN_DATE = new Date();
-    MIN_DATE.setDate(MIN_DATE.getDate() + 1);
     const seniority = ["Junior Developer", "Mid-Level Developer", "Senior Developer", "Lead Developer"]
     
     const handleAddJob = () => {}
@@ -60,6 +59,14 @@ const AddJob = () => {
                         { seniority.map((item) => <option key={item} value={item}>{item}</option>) }
                     </select>
                 </div>
+                <div className="w-full flex items-start gap-x-10 justify-end">
+                    <label className="inline-block text-2xl">
+                        Add Candidate
+                    </label>
+                    <input className="w-[40.81rem] text-lg outline-none placeholder-grayColor/70 border py-3 px-8 rounded-lg border-borderColor  text-inputTextColor" 
+                        onChange={(e) => setCandidate(e.target.value)} value={candidate}
+                        type="text" name="Add Candidate" placeholder="Add Candidate" />
+                </div>
                 <div className="w-full flex items-center gap-x-10 justify-end">
                     <label className="inline-block text-2xl">
                         End Date
@@ -68,10 +75,20 @@ const AddJob = () => {
                         value={expDate}
                         asSingle={true}
                         useRange={false}
-                        minDate={MIN_DATE}
+                        minDate={new Date()}
                         displayFormat="DD/MM/YYYY"
+                        placeholder="Select a Date"
+                        inputClassName="w-full text-lg outline-none py-2.5 px-8 bg-white placeholder-grayColor/70 border rounded-lg border-borderColor text-inputTextColor"
+                        containerClassName="w-[40.81rem] relative"
                         onChange={(newValue: any) => setExpDate(newValue)}
                     /> 
+                </div>
+                <div className="w-full flex items-center justify-end">
+                    <button type="submit"
+                        className="px-10 py-2 bg-mainColor hover:bg-mainColor/90 rounded-lg text-white text-xl font-semibold"
+                    >
+                        Send
+                    </button>
                 </div>
            </form>
         </div>
