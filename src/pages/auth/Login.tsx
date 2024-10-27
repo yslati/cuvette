@@ -5,7 +5,7 @@ import VerifyOtp from "./VerifyOtp";
 const Login = () => {
     const { company } = useAppSelector((state) => state.auth);
 
-    console.log(company);
+    // console.log(company);
     
 
     return (

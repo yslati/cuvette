@@ -1,11 +1,10 @@
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { verifyEmailOtp, verifyPhoneOtp } from "../../features/authSlice";
 import LoadingSVG from "../../components/LoadingSVG";
 import { CheckCircleIcon } from "@heroicons/react/16/solid";
 import { useNavigate } from 'react-router-dom';
-import toast from "react-hot-toast";
 
 const VerifyOtp = () => {
     const [emailOtp, setEmailOtp] = useState('');
@@ -21,35 +20,33 @@ const VerifyOtp = () => {
     const isEmailOtpValid = isOtpValid(emailOtp);
     const isPhoneOtpValid = isOtpValid(phoneOtp);
 
-    const submitEmailOtp = async () => {
+    const submitEmailOtp = () => {
         if (!company) return;
         setEmailLoading(true);
-        try {
-            const resultAction = await dispatch(verifyEmailOtp({ companyEmail: company.companyEmail, emailOtp }));
-            if (verifyEmailOtp.fulfilled.match(resultAction) && company.isPhoneVerified) {
-                toast.success(resultAction.payload.message);
-                navigate('/dashboard', { replace: true });
-            }
-        } finally {
-            setEmailLoading(false);
-            setEmailOtp('');
-        }
+        dispatch(verifyEmailOtp({ companyEmail: company.companyEmail, emailOtp }))
+        setEmailLoading(false);
+        setEmailOtp('');
     }
-
-    const submitPhoneOtp = async () => {
+    
+    const submitPhoneOtp = () => {
         if (!company) return;
         setPhoneLoading(true);
         try {
-            const resultAction = await dispatch(verifyPhoneOtp({ companyEmail: company.companyEmail, phoneOtp }));
-            if (verifyPhoneOtp.fulfilled.match(resultAction) && company.isEmailVerified) {
-                toast.success(resultAction.payload.message);
-                navigate('/dashboard', { replace: true });
-            }
+            dispatch(verifyPhoneOtp({ companyEmail: company.companyEmail, phoneOtp }));
+            // if (verifyPhoneOtp.fulfilled.match(resultAction) && company.isEmailVerified) {
+            //     navigate('/dashboard');
+            // }
         } finally {
             setPhoneLoading(false);
             setPhoneOtp('');
         }
     }
+    
+    useEffect(() => {
+        if (company && company.isPhoneVerified && company.isEmailVerified) {
+            navigate('/dashboard');
+        }
+    }, [company])
 
     return (
         <div className="mt-7 gap-y-6 flex flex-col">
