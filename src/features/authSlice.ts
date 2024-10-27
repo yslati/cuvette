@@ -90,11 +90,6 @@ export const initializeAuth = createAsyncThunk(
     async (_, { dispatch }) => {
         try {
             await dispatch(checkTokenExpiration());
-            // const state = getState() as RootState;
-            // if (state.auth.company) {
-            // } else {
-            //     dispatch(logout());
-            // }
         } catch (error) {
             console.error(error);
             dispatch(logout());
@@ -161,6 +156,7 @@ const authSlice = createSlice({
             if (action.payload.accessToken) {
                 localStorage.setItem("accessToken", action.payload.accessToken);
                 localStorage.setItem("refreshToken", state.company.refreshToken);
+                toast.success(action.payload.message);
             }
             state.error = null;
         })
@@ -180,6 +176,7 @@ const authSlice = createSlice({
             if (action.payload.accessToken) {
                 localStorage.setItem("accessToken", action.payload.accessToken);
                 localStorage.setItem("refreshToken", state.company.refreshToken);
+                toast.success(action.payload.message);
             }
             state.error = null;
         })
