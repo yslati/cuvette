@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axiosInstance from '../utils/axiosConfig'
 import { Company, RegisterForm } from '../types/company'
-import { jwtDecode, JwtPayload } from 'jwt-decode'
 import toast from 'react-hot-toast'
 
 interface CompanyState {

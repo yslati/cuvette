@@ -5,8 +5,6 @@ export interface Company {
     companyName: string;
     companyEmail: string;
     employeeSize: number
-    emailOtp: string;
-    phoneOtp: string;
     otpExpiration: Date;
     isEmailVerified: boolean;
     isPhoneVerified: boolean;

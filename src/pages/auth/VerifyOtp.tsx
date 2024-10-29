@@ -1,4 +1,4 @@
-import { EnvelopeIcon } from "@heroicons/react/24/outline";
+import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { verifyEmailOtp, verifyPhoneOtp } from "../../features/authSlice";
@@ -24,28 +24,25 @@ const VerifyOtp = () => {
         if (!company) return;
         setEmailLoading(true);
         dispatch(verifyEmailOtp({ companyEmail: company.companyEmail, emailOtp }))
-        setEmailLoading(false);
-        setEmailOtp('');
+        .then(() => {
+            setEmailLoading(false);
+            setEmailOtp('');
+        })
     }
     
     const submitPhoneOtp = () => {
         if (!company) return;
         setPhoneLoading(true);
-        try {
-            dispatch(verifyPhoneOtp({ companyEmail: company.companyEmail, phoneOtp }));
-            // if (verifyPhoneOtp.fulfilled.match(resultAction) && company.isEmailVerified) {
-            //     navigate('/dashboard');
-            // }
-        } finally {
+        dispatch(verifyPhoneOtp({ companyEmail: company.companyEmail, phoneOtp }))
+        .then(() => {
             setPhoneLoading(false);
             setPhoneOtp('');
-        }
+        })
     }
     
     useEffect(() => {
-        if (company && company.isPhoneVerified && company.isEmailVerified) {
+        if (company && company.isPhoneVerified && company.isEmailVerified)
             navigate('/dashboard');
-        }
     }, [company])
 
     return (
@@ -76,7 +73,7 @@ const VerifyOtp = () => {
             { !company?.isVerified &&
                 <div className="flex flex-col gap-y-4">
                     <div className="flex items-center border py-2.5 px-3 rounded-lg text-inputTextColor border-borderColor bg-inputColor">
-                        <EnvelopeIcon className="h-6 w-6" />
+                        <PhoneIcon className="h-6 w-6" />
                         <input className="w-full pl-2 outline-none border-none placeholder-grayColor/70 bg-inputColor"
                             onChange={(e) => setPhoneOtp(e.target.value)}
                             value={phoneOtp} type="text" name="Mobile Otp" placeholder="Mobile Otp"

@@ -1,8 +1,11 @@
 import { HomeIcon } from "@heroicons/react/16/solid";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
 import Datepicker from "react-tailwindcss-datepicker";
-
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { Job } from "../../types/job";
+import { postJob } from "../../features/jobsSlice";
 
 const AddJob = () => {
     const [jobTitle, setJobTitle] = useState('')
@@ -15,8 +18,30 @@ const AddJob = () => {
     });
 
     const seniority = ["Junior Developer", "Mid-Level Developer", "Senior Developer", "Lead Developer"]
+    const { company } = useAppSelector((state) => state.auth)
+    const { loading } = useAppSelector((state) => state.jobs)
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
     
-    const handleAddJob = () => {}
+    const handleAddJob = () => {
+        if (!jobTitle || !jobDescription || !expLevel || !candidate || !expDate.endDate)
+            return (toast.error('Please fill all job informations'));
+        if (!company) return (toast.error('Error'));
+        const jobInfo: Job = { companyId: company?._id, jobTitle, jobDescription, experienceLevel: expLevel, candidate, endDate: expDate.endDate };
+        dispatch(postJob(jobInfo)).unwrap()
+        .then(() => {
+            toast.success('Job posted successfully');
+            setJobTitle('');
+            setJobDescription('');
+            setExpLevel('');
+            setCandidate('');
+            setExpDate({ startDate: null, endDate: null });
+            navigate("/dashboard");
+        })
+        .catch((error) => {
+            toast.error(`Failed to post job: ${error.message || 'Unknown error'}`);
+        });
+    }    
 
     return (
     <div className="w-full h-screen font-DMSans flex mt-24 border-t border-[#C5C5C5]">
@@ -37,7 +62,7 @@ const AddJob = () => {
                         Job Title
                     </label>
                     <input className="w-[40.81rem] text-lg outline-none placeholder-grayColor/70 border py-3 px-8 rounded-lg border-borderColor  text-inputTextColor" 
-                        onChange={(e) => setJobTitle(e.target.value)} value={jobTitle}
+                        onChange={(e) => setJobTitle(e.target.value)} value={jobTitle} minLength={3} maxLength={100}
                         type="text" name="Job Title" placeholder="Enter Job Title" />
                 </div>
                 <div className="w-full flex items-start gap-x-10 justify-end">
@@ -45,7 +70,7 @@ const AddJob = () => {
                         Job Description
                     </label>
                     <textarea className="w-[40.81rem] h-[16.9rem] text-lg outline-none resize-none placeholder-grayColor/70 border py-3 px-8 rounded-lg border-borderColor  text-inputTextColor" 
-                        onChange={(e) => setJobDescription(e.target.value)} value={jobDescription}
+                        onChange={(e) => setJobDescription(e.target.value)} value={jobDescription} minLength={10} maxLength={2000}
                         name="Job Description" placeholder="Enter Job Description" />
                 </div>
                 <div className="w-full flex items-center gap-x-10 justify-end">
@@ -65,7 +90,7 @@ const AddJob = () => {
                     </label>
                     <input className="w-[40.81rem] text-lg outline-none placeholder-grayColor/70 border py-3 px-8 rounded-lg border-borderColor  text-inputTextColor" 
                         onChange={(e) => setCandidate(e.target.value)} value={candidate}
-                        type="text" name="Add Candidate" placeholder="Add Candidate" />
+                        type="email" name="Add Candidate" placeholder="Add Candidate" />
                 </div>
                 <div className="w-full flex items-center gap-x-10 justify-end">
                     <label className="inline-block text-2xl">
@@ -86,8 +111,9 @@ const AddJob = () => {
                 <div className="w-full flex items-center justify-end">
                     <button type="submit"
                         className="px-10 py-2 bg-mainColor hover:bg-mainColor/90 rounded-lg text-white text-xl font-semibold"
+                        disabled={loading}
                     >
-                        Send
+                        { loading ? 'Posting...' : 'Send' }
                     </button>
                 </div>
            </form>
