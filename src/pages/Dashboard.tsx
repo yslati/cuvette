@@ -1,7 +1,14 @@
 import { HomeIcon } from "@heroicons/react/16/solid";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "../app/hooks";
 
 const Dashboard = () => {
+
+    const { jobs } = useAppSelector((state) => state.jobs)
+
+    console.log(jobs);
+    
+
     return (
         <div className="w-full h-screen font-DMSans flex mt-24 border-t border-[#C5C5C5]">
             <div className="px-5 py-10 border-r border-[#C5C5C5]">
