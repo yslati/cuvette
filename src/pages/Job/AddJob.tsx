@@ -6,25 +6,27 @@ import Datepicker from "react-tailwindcss-datepicker";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { Job } from "../../types/job";
 import { postJob } from "../../features/jobsSlice";
+import EmailTagsInput from "./EmailTagsInput";
 
 const AddJob = () => {
     const [jobTitle, setJobTitle] = useState('')
     const [jobDescription, setJobDescription] = useState('')
     const [expLevel, setExpLevel] = useState('')
-    const [candidate, setCandidate] = useState('')
-    const [expDate, setExpDate] = useState({ 
-        startDate: null, 
-        endDate: null
-    });
+    const [candidate, setCandidate] = useState<string[]>([]);
+    const [expDate, setExpDate] = useState({ startDate: null, endDate: null });
 
     const seniority = ["Junior Developer", "Mid-Level Developer", "Senior Developer", "Lead Developer"]
     const { company } = useAppSelector((state) => state.auth)
     const { loading } = useAppSelector((state) => state.jobs)
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
+
+    const setCandidateEmails = (emails: string[]) => {
+        setCandidate(emails);
+    };
     
     const handleAddJob = () => {
-        if (!jobTitle || !jobDescription || !expLevel || !candidate || !expDate.endDate)
+        if (!jobTitle || !jobDescription || !expLevel || !candidate.length || !expDate.endDate)
             return (toast.error('Please fill all job informations'));
         if (!company) return (toast.error('Error'));
         const jobInfo: Job = { companyId: company?._id, jobTitle, jobDescription, experienceLevel: expLevel, candidate, endDate: expDate.endDate };
@@ -34,14 +36,14 @@ const AddJob = () => {
             setJobTitle('');
             setJobDescription('');
             setExpLevel('');
-            setCandidate('');
+            setCandidate([]);
             setExpDate({ startDate: null, endDate: null });
             navigate("/dashboard");
         })
         .catch((error) => {
             toast.error(`Failed to post job: ${error.message || 'Unknown error'}`);
         });
-    }    
+    }
 
     return (
     <div className="w-full h-screen font-DMSans flex mt-24 border-t border-[#C5C5C5]">
@@ -88,9 +90,7 @@ const AddJob = () => {
                     <label className="inline-block text-2xl">
                         Add Candidate
                     </label>
-                    <input className="w-[40.81rem] text-lg outline-none placeholder-grayColor/70 border py-3 px-8 rounded-lg border-borderColor  text-inputTextColor" 
-                        onChange={(e) => setCandidate(e.target.value)} value={candidate}
-                        type="email" name="Add Candidate" placeholder="Add Candidate" />
+                    <EmailTagsInput onEmailsChange={setCandidateEmails} />
                 </div>
                 <div className="w-full flex items-center gap-x-10 justify-end">
                     <label className="inline-block text-2xl">

@@ -3,6 +3,6 @@ export interface Job {
     jobTitle: string;
     jobDescription: string;
     experienceLevel: string;
-    candidate: string,
+    candidate: string[],
     endDate: Date;
 }

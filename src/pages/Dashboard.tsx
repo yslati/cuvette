@@ -29,9 +29,7 @@ const Dashboard = () => {
                         Create Interview
                     </button>
                 </Link>
-                <div className="mt-14 w-full grid grid-cols-3">
-                    { jobs && <JobsList /> }
-                </div>
+                { jobs && <JobsList /> }
             </div>
         </div>
     );
