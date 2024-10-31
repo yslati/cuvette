@@ -3,13 +3,12 @@ import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useEffect } from "react";
 import { fetchCompanyJobs } from "../features/jobsSlice";
+import JobsList from "./Job/JobsList";
 
 const Dashboard = () => {
 
     const dispatch = useAppDispatch()
     const { jobs } = useAppSelector((state) => state.jobs)
-
-    console.log(jobs);
     
     useEffect(() => {
         dispatch(fetchCompanyJobs());
@@ -31,9 +30,7 @@ const Dashboard = () => {
                     </button>
                 </Link>
                 <div className="mt-14 w-full grid grid-cols-3">
-                    { jobs &&
-                        jobs.map((job) => <span>{job.jobTitle}</span>)
-                    }
+                    { jobs && <JobsList /> }
                 </div>
             </div>
         </div>
