@@ -3,7 +3,6 @@ import Home from "./pages/Home";
 import Register from "./pages/auth/Register";
 import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
-// import JobDetails from "./pages/Job/JobDetails";
 import AddJob from "./pages/Job/AddJob";
 import Login from "./pages/auth/Login";
 import NotFound from "./pages/NotFound";
@@ -45,7 +44,6 @@ const App = () => {
               <AddJob />
             </PrivateRoute>
           } />
-          {/* <Route path="/jobs/:id" element={ <JobDetails /> } /> */}
           <Route path="*" element={ <NotFound /> } />
         </Routes>
       </BrowserRouter>
