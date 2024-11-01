@@ -90,7 +90,6 @@ export const initializeAuth = createAsyncThunk(
         try {
             await dispatch(checkTokenExpiration());
         } catch (error) {
-            console.error(error);
             dispatch(logout());
         }
     }

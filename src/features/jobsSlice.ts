@@ -51,7 +51,6 @@ const jobsSlice = createSlice({
         .addCase(postJob.fulfilled, (state, action: PayloadAction<{ message: string, job: Job }>) => {
             state.loading = false;
             state.error = null;
-            console.log(action.payload);
             state.jobs?.push(action.payload.job);
         })
         .addCase(postJob.rejected, (state, action: PayloadAction<any>) => {

@@ -3,10 +3,7 @@ import LoginForm from "./Form/LoginForm";
 import VerifyOtp from "./VerifyOtp";
 
 const Login = () => {
-    const { company } = useAppSelector((state) => state.auth);
-
-    // console.log(company);
-    
+    const { company } = useAppSelector((state) => state.auth);    
 
     return (
         <div className="w-screen h-screen flex items-center justify-between px-36 font-DMSans gap-x-5">
