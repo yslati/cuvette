@@ -14,12 +14,12 @@ const Home = () => {
                 Welcome
             </h1>
             <div className="flex gap-x-5">
-                <Link to={"/register"}>
+                <Link to={"/register"} reloadDocument>
                     <button className="px-4 py-2 rounded-xl bg-mainColor hover:bg-mainColor/90 text-white text-xl font-medium">
                         Register
                     </button>
                 </Link>
-                <Link to={"/login"}>
+                <Link to={"/login"} reloadDocument>
                     <button className="px-7 py-2 rounded-xl bg-mainColor hover:bg-mainColor/90 text-white text-xl font-medium">
                         Login
                     </button>
